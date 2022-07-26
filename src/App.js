@@ -6,6 +6,25 @@ function App() {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
+  const [counters, setCounters] = useState([]);
+
+  const newCounters = () => {
+    const newCounters = [...counters];
+    newCounters.push(1);
+    setCounters(newCounters);
+  };
+
+  const handleClickLess = (indexToCheck) => {
+    const newCounters = [...counters];
+    newCounters[indexToCheck]--;
+    setCounters(newCounters);
+  };
+  const handleClickMore = (indexToCheck) => {
+    const newCounters = [...counters];
+    newCounters[indexToCheck]++;
+    setCounters(newCounters);
+  };
+
   const fetchData = async () => {
     const response = await axios.get("http://localhost:3200/");
     // console.log(response.data);
@@ -16,6 +35,10 @@ function App() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const addMenuToBasket = (indexMenu, title, price) => {
+    console.log("click is ok");
+  };
 
   return isLoading ? (
     <span>En cours de chargement... </span>
@@ -46,7 +69,7 @@ function App() {
                     <div className="oneCategorie">
                       {key.meals.map((element) => {
                         return (
-                          <div className="menu">
+                          <div className="menu" onClick={newCounters}>
                             <div>
                               <h4>{element.title}</h4>
                               {element.description && (
@@ -73,9 +96,39 @@ function App() {
               );
             })}
           </div>
-
           <div className="panier">
-            <h2>PANIER</h2>
+            <div>
+              <h2>PANIER</h2>
+            </div>
+            {counters.map((counter, index) => {
+              return (
+                <div className="basket-menu" key={index}>
+                  <button
+                    onClick={() => {
+                      counter > 0 && handleClickLess(index);
+                    }}
+                  >
+                    -
+                  </button>
+                  <p>{counters}</p>
+                  <button
+                    onClick={() => {
+                      handleClickMore(index);
+                    }}
+                  >
+                    +
+                  </button>
+                  {data.categories.map((key) => {
+                    return (
+                      <div>
+                        <p>{key.title}</p>
+                        <p>{key.price}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
           </div>
         </main>
       </div>

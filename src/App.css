@@ -123,3 +123,7 @@ main img {
   /* border: green solid 2px; */
   width: 150%;
 }
+
+.basket-menu {
+  display: flex;
+}
